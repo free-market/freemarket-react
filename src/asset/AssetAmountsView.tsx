@@ -5,7 +5,7 @@ import AnimatedNumber from './AnimatedNumber'
 import AssetAmountView from './AssetAmountView'
 import AmountView from './AmountView'
 
-interface AssetAmountsViewProps {
+export interface AssetAmountsViewProps {
   chain: Chain
   assetAmounts: AssetAmount[]
   fungibleTokens: FungibleToken[]

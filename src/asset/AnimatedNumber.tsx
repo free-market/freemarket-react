@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react'
 import './AnimatedNumber.css'
 
-interface AnimatedNumberProps {
+export interface AnimatedNumberProps {
   value: number | string
   trailingZeros?: number
   style?: CSSProperties
