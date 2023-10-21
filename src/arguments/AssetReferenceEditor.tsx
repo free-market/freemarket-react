@@ -1,5 +1,4 @@
-import { Asset, AssetReference, AssetType, PARAMETER_REFERENCE_REGEXP } from '@freemarket/client-sdk'
-import React, { useState } from 'react'
+import { AssetReference, PARAMETER_REFERENCE_REGEXP } from '@freemarket/client-sdk'
 
 interface Props {
   error: boolean

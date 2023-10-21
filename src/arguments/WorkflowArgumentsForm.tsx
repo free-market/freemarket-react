@@ -1,6 +1,6 @@
-import React, { useMemo, Fragment, useEffect } from 'react'
-import { Arguments, Workflow, createParametersSchema, ParameterType, Foo } from '@freemarket/client-sdk'
-import { useForm, Controller, SubmitHandler, SubmitErrorHandler } from 'react-hook-form'
+import { useMemo, Fragment } from 'react'
+import { Arguments, Workflow, createParametersSchema, ParameterType } from '@freemarket/client-sdk'
+import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import AssetReferenceEditor from './AssetReferenceEditor'
 // import style from './WorkflowArgumentsForm.module.css'
@@ -38,31 +38,15 @@ export default function WorkflowArgumentsForm(props: Props) {
     ...(parametersSchema && { resolver: zodResolver(parametersSchema) }),
   })
 
-  const { watch, getValues, control, handleSubmit, formState, register } = form
-  const { isValid } = formState
-
-  React.useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
-      const result = parametersSchema?.safeParse(value)
-      const isValid = result?.success ?? false
-      console.log('xxxxxx', isValid, value, name, type)
-      if (!result?.success) {
-        console.log('result.error', result?.error)
-      }
-    })
-    return () => subscription.unsubscribe()
-  }, [watch, parametersSchema])
+  const { control, handleSubmit, register } = form
 
   if (!parametersSchema) {
     return null
   }
 
   const onSubmitValid: SubmitHandler<any> = data => {
-    console.log('onSubmitValid', data)
     onSubmit(data)
   }
-
-  const { errors } = formState
 
   return (
     <>

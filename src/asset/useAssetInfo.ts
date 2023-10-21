@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Asset, Workflow, AssetInfoService, AssetReference, Chain, assert, AssetNotFoundError, FungibleToken } from '@freemarket/client-sdk'
+import { Asset, AssetInfoService, AssetReference, Chain, AssetNotFoundError, FungibleToken } from '@freemarket/client-sdk'
 import { Maybe } from '../utils'
 
 export type AssetInfoResult = Asset | 'unknown' | undefined

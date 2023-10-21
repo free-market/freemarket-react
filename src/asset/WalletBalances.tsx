@@ -1,11 +1,8 @@
-import { AssetAmount, AssetReference, Chain, FungibleToken } from '@freemarket/client-sdk'
-import React from 'react'
+import { AssetAmount, AssetReference, FungibleToken } from '@freemarket/client-sdk'
 import { useAssetBalances } from './useAssetBalances'
 import type { EIP1193Provider } from 'eip1193-provider'
-import { AssetInfoResult, useAssetInfos } from './useAssetInfo'
+import { useAssetInfos } from './useAssetInfo'
 import { useChain } from '../chain/useChain'
-import AssetView from './AssetView'
-import AssetAmountView, { AssetAmountViewProps } from './AssetAmountView'
 import AssetAmountsView from './AssetAmountsView'
 
 export interface WalletBalancesProps {

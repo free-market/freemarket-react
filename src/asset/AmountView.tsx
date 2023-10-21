@@ -1,15 +1,14 @@
 import { Chain, formatNumber } from '@freemarket/client-sdk'
-import AssetView, { AssetViewProps } from './AssetView'
-import { AssetInfoResult, useAssetInfo, useAssetInfos } from './useAssetInfo'
+import { AssetViewProps } from './AssetView'
+import { AssetInfoResult, useAssetInfo } from './useAssetInfo'
 import AnimatedNumber from './AnimatedNumber'
-import { CSSProperties } from 'react'
 
 interface AmountViewProps extends AssetViewProps {
   amount: string
 }
 
 export default function AmountView(props: AmountViewProps) {
-  const { amount, ...rest } = props
+  const { amount } = props
   const chain = props.chain
   const assetInfo = useAssetInfo(props.assetRef, props.chain, props.fungibleTokens)
   if (assetInfo === undefined) {

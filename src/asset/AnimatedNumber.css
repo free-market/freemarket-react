@@ -24,7 +24,7 @@
   inherits: true;
 }
 .animated-number {
-  transition: --numbervalue 0.4s ease-out;
+  transition: --numbervalue 1s ease-out;
   --temp: calc(var(--numbervalue));
   --v1: max(var(--numbervalue) - 0.5, 0);
   --v2: max((var(--numbervalue) - var(--v1)) * var(--decimals) - 0.5, 0);

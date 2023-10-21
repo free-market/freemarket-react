@@ -1,10 +1,9 @@
-import { DependencyList, useEffect, useRef, useState } from 'react'
+import { DependencyList, useEffect, useRef } from 'react'
 
 export const useEffectOnce = (effect: () => void | (() => void), deps: DependencyList = []) => {
   const destroyFunc = useRef<void | (() => void)>()
   const effectCalled = useRef(false)
   const renderAfterCalled = useRef(false)
-  const [val, setVal] = useState<number>(0)
 
   if (effectCalled.current) {
     renderAfterCalled.current = true

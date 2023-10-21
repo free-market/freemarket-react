@@ -1,17 +1,6 @@
-import React, { CSSProperties, useEffect } from 'react'
-import {
-  Asset as AssetInfo,
-  Memoize,
-  Workflow,
-  AssetInfoService,
-  AssetReference,
-  Chain,
-  assert,
-  capitalize,
-  FungibleToken,
-} from '@freemarket/client-sdk'
+import { CSSProperties } from 'react'
+import { AssetReference, Chain, assert, capitalize, FungibleToken } from '@freemarket/client-sdk'
 import UnknownAssetIcon from './UnknownAssetIcon'
-import { shortAddress } from './asset-view-utils'
 import { useAssetInfo } from './useAssetInfo'
 
 export interface AssetViewProps {
@@ -54,7 +43,7 @@ export default function AssetView(props: AssetViewProps) {
   }
   return (
     <div style={style}>
-      <img width={24} height={24} src={assetInfo?.iconUrl} />
+      <img width={24} height={24} src={assetInfo?.iconUrl} alt={assetInfo.symbol} />
       {assetInfo.symbol}
     </div>
   )

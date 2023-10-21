@@ -1,7 +1,6 @@
 import { Chain, formatNumber } from '@freemarket/client-sdk'
 import AssetView, { AssetViewProps } from './AssetView'
 import { AssetInfoResult, useAssetInfo } from './useAssetInfo'
-import AnimatedNumber from './AnimatedNumber'
 import { CSSProperties } from 'react'
 import AmountView from './AmountView'
 
