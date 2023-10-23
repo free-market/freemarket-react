@@ -1,7 +1,7 @@
 name: Publish client-sdk to npmjs
 on:
   push:
-    tags: args-ui-react-*
+    tags: freemarket-react-*
 
 jobs:
   publish_client_sdk:
