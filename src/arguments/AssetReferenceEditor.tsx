@@ -1,13 +1,18 @@
 import { AssetReference, PARAMETER_REFERENCE_REGEXP } from '@freemarket/client-sdk'
+import { InputRenderer } from './InputRenderer'
+import { SelectProps, SelectRenderer } from './SelectRenderer'
 
 interface Props {
-  error: boolean
+  error?: string
   value?: AssetReference
   onChange: (asset: AssetReference) => void
   hideParameter?: boolean
+  inputRenderer?: InputRenderer
+  selectRenderer?: SelectRenderer
 }
 
-export default function AssetReferenceEditor({ value, onChange, error, hideParameter }: Props) {
+export default function AssetReferenceEditor(props: Props) {
+  const { value, onChange, error, hideParameter, inputRenderer, selectRenderer } = props
   const assetType = getAssetRefType(value)
   const assetSymbol = typeof value !== 'string' && value?.type === 'fungible-token' ? value.symbol : ''
   const parameterName = typeof value === 'string' ? getParameterName(value) : ''
@@ -22,8 +27,20 @@ export default function AssetReferenceEditor({ value, onChange, error, hideParam
     }
   }
 
-  return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+  function renderSelect() {
+    if (selectRenderer) {
+      const selectProps: SelectProps = {
+        value: assetType,
+        options: [
+          { value: 'token', label: 'Token' },
+          { value: 'native', label: 'Native' },
+        ],
+        onChange: value => fireOnChange(value, assetSymbol, parameterName),
+      }
+
+      return selectRenderer(selectProps)
+    }
+    return (
       <select
         value={assetType}
         onChange={e => e.target.value && fireOnChange(e.target.value, assetSymbol, parameterName)}
@@ -36,19 +53,37 @@ export default function AssetReferenceEditor({ value, onChange, error, hideParam
           Native
         </option>
       </select>
-      <div style={{ minWidth: '195px', display: 'flex', alignItems: 'center' }}>
-        {assetType === 'token' && (
-          <>
-            <label style={{ paddingLeft: 20, paddingRight: 10 }}>Symbol</label>
-            <input
-              style={{ flexGrow: 1, width: 100 }}
-              onChange={e => fireOnChange(assetType, e.target.value, parameterName)}
-              value={assetSymbol}
-              color={error ? 'danger' : 'neutral'}
-            />
-          </>
-        )}
-      </div>
+    )
+  }
+
+  function renderInput() {
+    if (inputRenderer) {
+      return inputRenderer({
+        name: '',
+        value: assetSymbol,
+        onChange: value => fireOnChange(assetType, assetSymbol, parameterName),
+        error,
+      })
+    }
+    return (
+      <input
+        type="text"
+        value={assetSymbol}
+        onChange={e => fireOnChange(assetType, e.target.value, parameterName)}
+        style={{ minWidth: 110 }}
+      />
+    )
+  }
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      {renderSelect()}
+      {assetType === 'token' && (
+        <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+          <label style={{ paddingLeft: 20, paddingRight: 10 }}>Symbol</label>
+          {renderInput()}
+        </div>
+      )}
     </div>
   )
 }
