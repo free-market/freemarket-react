@@ -1,4 +1,4 @@
-import React, { useMemo, Fragment } from 'react'
+import React, { useMemo, Fragment, useRef, MutableRefObject } from 'react'
 import { Arguments, Workflow, createParametersSchema, ParameterType, Parameter } from '@freemarket/client-sdk'
 import { FormControlRegisterer, useForm } from './useForm'
 import { z } from 'zod'
@@ -11,13 +11,17 @@ import { SelectRenderer } from './SelectRenderer'
 type NoArgsVoidFunc = () => void
 type SubmitRenderer = (onSubmitHandler: NoArgsVoidFunc) => React.ReactElement
 
+export type ArgumentsHandler = (args: Arguments) => void
+
 interface Props {
   workflow: Workflow
-  onSubmit: (args: Arguments) => void
-  onChange?: (args: Arguments) => void
+  onSubmit: ArgumentsHandler
+  onChange?: ArgumentsHandler
   inputRenderer?: InputRenderer
   selectRenderer?: SelectRenderer
   submitRenderer?: SubmitRenderer
+  submitHandlerRef?: MutableRefObject<(() => void) | undefined>
+  hideSubmit?: boolean
 }
 
 function placeholder(paramType: ParameterType) {
@@ -48,6 +52,10 @@ export default function WorkflowArgumentsForm(props: Props) {
   }
 
   const form = useForm({}, parametersSchema, handleSubmit)
+
+  if (props.submitHandlerRef) {
+    props.submitHandlerRef.current = form.submit
+  }
 
   const { register, registerInput } = form
 
@@ -146,7 +154,7 @@ export default function WorkflowArgumentsForm(props: Props) {
           })}
         </div>
         {props.submitRenderer && props.submitRenderer(() => form.submit())}
-        {!props.submitRenderer && (
+        {!props.submitRenderer && props.hideSubmit !== true && (
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
             <button className="workflowArgumentsForm__button--internal workflowArgumentsForm__button" type="submit">
               <div className="workflowArgumentsForm__button__text--internal workflowArgumentsForm__button__text">Submit</div>

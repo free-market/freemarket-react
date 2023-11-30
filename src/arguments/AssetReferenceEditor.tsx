@@ -61,7 +61,7 @@ export default function AssetReferenceEditor(props: Props) {
       return inputRenderer({
         name: '',
         value: assetSymbol,
-        onChange: value => fireOnChange(assetType, assetSymbol, parameterName),
+        onChange: value => fireOnChange(assetType, value.target.value, parameterName),
         error,
       })
     }

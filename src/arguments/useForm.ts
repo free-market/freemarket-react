@@ -76,22 +76,27 @@ export function useForm(initialValues: Record<string, any>, schema: z.Schema<any
   }
   const registerForm: FormRegisterer = { onSubmit: onFormSubmit }
 
-  function validate(newValues: Record<string, any>) {
+  function validate(newValues: Record<string, any>): any {
     const result = schema.safeParse(newValues)
-    const newErrors: Record<string, string> = {}
     if (result.success) {
-      setErrors(newErrors)
+      setErrors({})
+      return result.data
     } else {
+      const newErrors: Record<string, string> = {}
       for (const issue of result.error.issues) {
         newErrors[issue.path[0]] = issue.message
       }
       setErrors(newErrors)
+      return null
     }
   }
 
   function submit() {
     setSubmitted(true)
-    validate(values)
+    const validatedValues = validate(values)
+    if (validatedValues) {
+      submitHandler(validatedValues)
+    }
   }
 
   return { values, errors, register, submit, registerForm, registerInput }
