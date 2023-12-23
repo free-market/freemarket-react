@@ -3,21 +3,25 @@ import { AssetViewProps } from './AssetView'
 import { AssetInfoResult, useAssetInfo } from './useAssetInfo'
 import AnimatedNumber from './AnimatedNumber'
 
-interface AmountViewProps extends AssetViewProps {
+export interface AmountViewProps extends AssetViewProps {
   amount: string
+  fractionalDigits?: number
 }
 
 export default function AmountView(props: AmountViewProps) {
   const { amount } = props
   const chain = props.chain
   const assetInfo = useAssetInfo(props.assetRef, props.chain, props.fungibleTokens)
-  if (assetInfo === undefined) {
+  if (assetInfo === undefined && props.asset === undefined) {
     return null
   }
 
   const decimals = getDecimalsForAsset(assetInfo, chain)
-  const formatted = formatNumber(amount, decimals)
-  return <AnimatedNumber value={formatted} style={props.style} />
+  console.log('amounttt', amount)
+  const fd = props.fractionalDigits || 4
+  const formatted = formatNumber(amount, decimals, fd)
+  // return <AnimatedNumber value={formatted} style={props.style} trailingZeros={fd} />
+  return <div style={props.style}>{formatted}</div>
 }
 
 const DEFAULT_DECIMALS = 18

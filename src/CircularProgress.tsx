@@ -1,5 +1,15 @@
+import { CSSProperties } from 'react'
 import './CircularProgress.css'
 
-export default function CircularProgress() {
-  return <progress className="pure-material-progress-circular" />
+interface Props {
+  size?: number
+}
+
+export default function CircularProgress(props: Props) {
+  const style: CSSProperties = {}
+  if (props.size) {
+    style.width = props.size
+    style.height = props.size
+  }
+  return <progress style={style} className="pure-material-progress-circular" />
 }

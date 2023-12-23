@@ -14,20 +14,22 @@ export default function AssetAmountView(props: AssetAmountViewProps) {
   const { amount, assetStyle, amountStyle, ...assetProps } = props
   const chain = props.chain
   const assetInfo = useAssetInfo(props.assetRef, props.chain, props.fungibleTokens)
-  if (assetInfo === undefined) {
+  if (assetInfo === undefined && props.asset === undefined) {
     return null
   }
 
   const decimals = getDecimalsForAsset(assetInfo, chain)
 
-  const formatted = formatNumber(amount, decimals)
+  // const formatted = formatNumber(amount, decimals)
+  console.log('amountttt AssetAmountView', amount)
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
       <AssetView {...assetProps} style={assetStyle} />
       <AmountView
         assetRef={assetProps.assetRef}
+        asset={assetProps.asset}
         chain={assetProps.chain}
-        amount={formatted}
+        amount={amount}
         style={amountStyle}
         fungibleTokens={props.fungibleTokens}
       />

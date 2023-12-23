@@ -1,4 +1,5 @@
 export * from './asset-view-utils'
+export { default as AmountView, AmountViewProps } from './AmountView'
 export { default as AssetView, AssetViewProps } from './AssetView'
 export { default as AssetAmountView, AssetAmountViewProps } from './AssetAmountView'
 export { default as AssetAmountsView, AssetAmountsViewProps } from './AssetAmountsView'

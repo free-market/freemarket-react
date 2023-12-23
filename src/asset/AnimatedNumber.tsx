@@ -15,5 +15,6 @@ export default function AnimatedNumber(props: AnimatedNumberProps) {
   if (value === 0) {
     return <div style={style}>{'0.' + '0'.repeat(trailingZeros)}</div>
   }
+  console.log('animated number', value, decimalsStr, trailingZeros)
   return <div className="animated-number" style={style} />
 }

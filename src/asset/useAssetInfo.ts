@@ -42,10 +42,12 @@ export function useAssetInfos(
   return assetInfos
 }
 
-export function useAssetInfo(assetRef: AssetReference, chain: Chain, fungibleTokens: FungibleToken[]): AssetInfoResult | undefined {
+export function useAssetInfo(assetRef: AssetReference | undefined, chain: Chain, fungibleTokens: FungibleToken[]): AssetInfoResult {
   const [assetInfo, setAssetInfo] = React.useState<AssetInfoResult | undefined>(undefined)
   useEffect(() => {
-    void getAssetInfo(assetRef, chain, fungibleTokens).then(setAssetInfo)
+    if (assetRef) {
+      void getAssetInfo(assetRef, chain, fungibleTokens).then(setAssetInfo)
+    }
   }, [assetRef, chain, fungibleTokens])
   return assetInfo
 }

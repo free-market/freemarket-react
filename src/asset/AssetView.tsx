@@ -1,20 +1,25 @@
 import { CSSProperties } from 'react'
-import { AssetReference, Chain, assert, capitalize, FungibleToken } from '@freemarket/client-sdk'
+import { AssetReference, Chain, assert, capitalize, FungibleToken, Asset } from '@freemarket/client-sdk'
 import UnknownAssetIcon from './UnknownAssetIcon'
-import { useAssetInfo } from './useAssetInfo'
+import { AssetInfoResult, useAssetInfo } from './useAssetInfo'
 
 export interface AssetViewProps {
-  assetRef: AssetReference
+  assetRef?: AssetReference
+  asset?: Asset
   chain: Chain
   fungibleTokens: FungibleToken[]
   style?: CSSProperties
 }
 
 export default function AssetView(props: AssetViewProps) {
-  const { assetRef, chain, fungibleTokens } = props
+  const { assetRef, asset: assetFromProps, chain, fungibleTokens } = props
   assert(typeof assetRef !== 'string')
+  assert(assetRef === undefined || assetFromProps === undefined, 'define asset or assetRef but not both')
 
-  const assetInfo = useAssetInfo(assetRef, chain, fungibleTokens ?? [])
+  const assetInfo: AssetInfoResult = useAssetInfo(assetRef, chain, fungibleTokens)
+  assert(assetFromProps || (assetInfo !== undefined && assetInfo !== 'unknown'))
+  const asset: Asset = assetInfo && typeof assetInfo !== 'string' ? assetInfo : assetFromProps!
+
   const style: CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
@@ -23,15 +28,15 @@ export default function AssetView(props: AssetViewProps) {
   }
 
   // undefined means useAssetInfo is still loading, don't render anything
-  if (assetInfo === undefined) {
+  if (asset === undefined) {
     // TODO maybe decide on a rect size here and render a blank rect so it takes up the same amount of space
     return null
   }
 
   if (assetInfo === 'unknown') {
     let name: string
-    if (assetRef.type === 'fungible-token') {
-      name = assetRef.symbol
+    if (asset.type === 'fungible-token') {
+      name = asset.symbol
     } else {
       name = `${capitalize(chain)} Native`
     }
@@ -43,8 +48,8 @@ export default function AssetView(props: AssetViewProps) {
   }
   return (
     <div style={style}>
-      <img width={24} height={24} src={assetInfo?.iconUrl} alt={assetInfo.symbol} />
-      {assetInfo.symbol}
+      <img width={24} height={24} src={asset.iconUrl} alt={asset.symbol} />
+      {asset.symbol}
     </div>
   )
 }
