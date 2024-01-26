@@ -46,13 +46,13 @@ export function useForm(initialValues: Record<string, any>, schema: z.Schema<any
 
   function register(name: string): FormControlRegisterer {
     return {
-      value: values[name],
+      value: getValue(name),
       onChange: (value: any) => onChange(name, value),
     }
   }
 
   function registerInput(name: string): FormControlRegistererInput {
-    const value = values[name]
+    const value = getValue(name)
 
     const inputOnChange = (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value
@@ -65,6 +65,10 @@ export function useForm(initialValues: Record<string, any>, schema: z.Schema<any
       value: value,
       onChange: inputOnChange,
     }
+  }
+
+  function getValue(name: string) {
+    return values[name] || ''
   }
 
   const onFormSubmit: FormEventHandler<HTMLFormElement> = e => {

@@ -2,6 +2,7 @@ import { CSSProperties } from 'react'
 import { AssetReference, Chain, assert, capitalize, FungibleToken, Asset } from '@freemarket/client-sdk'
 import UnknownAssetIcon from './UnknownAssetIcon'
 import { AssetInfoResult, useAssetInfo } from './useAssetInfo'
+import UnknownAsset from '../UnknownAsset'
 
 export interface AssetViewProps {
   assetRef?: AssetReference
@@ -9,6 +10,7 @@ export interface AssetViewProps {
   chain: Chain
   fungibleTokens: FungibleToken[]
   style?: CSSProperties
+  iconSize?: number
 }
 
 export default function AssetView(props: AssetViewProps) {
@@ -46,9 +48,11 @@ export default function AssetView(props: AssetViewProps) {
       </div>
     )
   }
+  const iconSize = props.iconSize ?? 24
   return (
     <div style={style}>
-      <img width={24} height={24} src={asset.iconUrl} alt={asset.symbol} />
+      {asset.iconUrl && <img width={iconSize} height={iconSize} src={asset.iconUrl} alt={asset.symbol} />}
+      {!asset.iconUrl && <UnknownAsset width={iconSize} height={iconSize} />}
       {asset.symbol}
     </div>
   )

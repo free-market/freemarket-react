@@ -11,13 +11,13 @@ export interface AmountViewProps extends AssetViewProps {
 export default function AmountView(props: AmountViewProps) {
   const { amount } = props
   const chain = props.chain
-  const assetInfo = useAssetInfo(props.assetRef, props.chain, props.fungibleTokens)
+  const assetInfoFromRef = useAssetInfo(props.assetRef, props.chain, props.fungibleTokens)
+  const assetInfo = props.asset || assetInfoFromRef
   if (assetInfo === undefined && props.asset === undefined) {
     return null
   }
 
   const decimals = getDecimalsForAsset(assetInfo, chain)
-  console.log('amounttt', amount)
   const fd = props.fractionalDigits || 4
   const formatted = formatNumber(amount, decimals, fd)
   // return <AnimatedNumber value={formatted} style={props.style} trailingZeros={fd} />

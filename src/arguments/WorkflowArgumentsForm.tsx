@@ -1,4 +1,4 @@
-import React, { useMemo, Fragment, useRef, MutableRefObject } from 'react'
+import React, { useMemo, Fragment, useRef, MutableRefObject, Ref, RefCallback } from 'react'
 import { Arguments, Workflow, createParametersSchema, ParameterType, Parameter } from '@freemarket/client-sdk'
 import { FormControlRegisterer, useForm } from './useForm'
 import { z } from 'zod'
@@ -13,6 +13,8 @@ type SubmitRenderer = (onSubmitHandler: NoArgsVoidFunc) => React.ReactElement
 
 export type ArgumentsHandler = (args: Arguments) => void
 
+type VoidNoArgsFunc = () => void
+
 interface Props {
   workflow: Workflow
   onSubmit: ArgumentsHandler
@@ -20,7 +22,7 @@ interface Props {
   inputRenderer?: InputRenderer
   selectRenderer?: SelectRenderer
   submitRenderer?: SubmitRenderer
-  submitHandlerRef?: MutableRefObject<(() => void) | undefined>
+  submitHandlerRef?: RefCallback<VoidNoArgsFunc> | MutableRefObject<VoidNoArgsFunc | undefined>
   hideSubmit?: boolean
 }
 
@@ -37,7 +39,7 @@ function placeholder(paramType: ParameterType) {
 }
 
 export default function WorkflowArgumentsForm(props: Props) {
-  const { workflow, onSubmit } = props
+  const { workflow, onSubmit, submitHandlerRef } = props
   const { params, parametersSchema } = useMemo(
     () => ({
       params: workflow.parameters?.filter(it => !it.name.startsWith('remittances.')) ?? [],
@@ -53,8 +55,12 @@ export default function WorkflowArgumentsForm(props: Props) {
 
   const form = useForm({}, parametersSchema, handleSubmit)
 
-  if (props.submitHandlerRef) {
-    props.submitHandlerRef.current = form.submit
+  if (submitHandlerRef) {
+    if (typeof submitHandlerRef === 'function') {
+      submitHandlerRef(form.submit)
+    } else {
+      submitHandlerRef.current = form.submit
+    }
   }
 
   const { register, registerInput } = form
